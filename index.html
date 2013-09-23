@@ -1,0 +1,56 @@
+<!doctype html>
+<!-- Register Angular with DOM -->
+<html ng-app>
+<head>
+	<meta charset='utf-8'>
+	<title>Feedback</title>
+	<link rel='stylesheet' href='//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css'>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/
+	angular.js"></script>
+</head>
+<body>
+	<!-- ng-controller: Specify controller for specific area of DOM -->
+	<div class='container' ng-controller='TextAreaWithLimitCtrl'>
+		<h2>Feedback</h2>
+		<!-- ng-class: Dynamically apply classes -->
+		<span ng-class="{'text-warning': shouldWarn()}">
+			Remaining: {{remaining()}}
+		</span>
+		<div class="row">
+			<!-- ng-model: Register model for specific $scope -->
+			<textarea ng-model='message'>{{message}}</textarea>
+		</div>
+		<div class="row">
+			<!-- ng-disabled: Disable button dynamically -->
+			<!-- ng-click: Specify click event -->
+			<button ng-disabled='!hasValidLength()' ng-click='send()' class='btn btn-primary'>Send</button>
+			<button ng-click='clear()' class='btn btn-primary'>Clear</button>
+		</div>
+	</div>
+	<script>
+		// Pass in $scope as argument to controllers
+		var TextAreaWithLimitCtrl = function ($scope) {
+			var MAX_LEN = 50;
+			var WARN_THRESHOLD = 10;
+			// Default value for model
+			$scope.message = '';
+			// Add all controller methods to $scope
+			$scope.remaining = function(){
+				return MAX_LEN - $scope.message.length;
+			};
+			$scope.hasValidLength = function(){
+				return $scope.message.length < MAX_LEN;
+			};
+			$scope.shouldWarn = function(){
+				return $scope.remaining() < WARN_THRESHOLD;
+			};
+			$scope.clear = function(){
+				$scope.message = '';
+			};
+			$scope.send = function(){
+				alert('Thanks for the feedback!');
+			};
+		};
+	</script>
+</body>
+</html>
